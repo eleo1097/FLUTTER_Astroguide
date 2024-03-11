@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:astroguide_flutter/services/user_service.dart';
-import 'package:get_storage/get_storage.dart';
+import 'package:get_storage/get_storage.dart'; 
 
 class EditarPerfil extends StatefulWidget {
   @override
   _EditarPerfilState createState() => _EditarPerfilState();
 }
+
 
 class _EditarPerfilState extends State<EditarPerfil> {
   late TextEditingController _nameController;
@@ -25,6 +26,13 @@ class _EditarPerfilState extends State<EditarPerfil> {
 
     obtenerDatosActuales();
   }
+  void _actualizarUsuario() {
+    UserService.actualizarUsuario(
+      _nombreActual,
+      _usernameActual,
+      _emailActual as Map<String, dynamic>,
+    );
+  }
 
   Future<void> obtenerDatosActuales() async {
     var storage = GetStorage();
@@ -35,13 +43,14 @@ class _EditarPerfilState extends State<EditarPerfil> {
       _nombreActual = userData.name;
       _usernameActual = userData.username;
       _emailActual = userData.email;
-
-      // Establecer los valores iniciales de los controladores de texto
+      
       _nameController.text = _nombreActual;
       _usernameController.text = _usernameActual;
       _emailController.text = _emailActual;
     });
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -59,12 +68,7 @@ class _EditarPerfilState extends State<EditarPerfil> {
             _buildTextField("Correo electrónico", _emailController),
             SizedBox(height: 20.0),
             ElevatedButton(
-              onPressed: () {
-
-                //funcion actualizar
-                
-                Navigator.pop(context);
-              },
+              onPressed: _actualizarUsuario,
               child: Text('Guardar Cambios'),
             ),
           ],

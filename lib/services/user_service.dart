@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:html';
 import 'package:astroguide_flutter/models/comment_model.dart';
+import 'package:astroguide_flutter/pages/editar_perfil.dart';
 import 'package:astroguide_flutter/pages/perfil.dart';
 import 'package:http/http.dart' as http;
 
@@ -30,5 +32,22 @@ class UserService {
       }
   }
 
-  
+  static Future<void> actualizarUsuario(String token, String url, Map<String, dynamic> userData) async {
+    final Url = "http://10.0.2.2:8000/api/updateUser/{id}";
+    var headers = {
+      'Content-Type': 'application/json',
+      'authorization': 'Bearer $token'
+    };
+    try {
+      final response = await http.put(Uri.parse(url), headers: headers, body: json.encode(userData));
+      if (response.statusCode == 200) {
+        print('Datos actualizados exitosamente');
+      } else {
+        throw Exception('Error al actualizar usuario: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error al actualizar usuario: $e');
+    }
+  }
+
 }
