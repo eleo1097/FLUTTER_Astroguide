@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:astroguide_flutter/services/lecciones_service.dart';
+import 'package:get_storage/get_storage.dart';
 import 'menu.dart'; // Importa la primera página para la navegación
 
 void main() {
@@ -33,68 +34,95 @@ class LeccionesList extends StatefulWidget {
 class _LeccionesListState extends State<LeccionesList> {
   final ScrollController _scrollController = ScrollController();
 
+  List<dynamic> _leccionesData = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _cargarLecciones();
+  }
+
+  Future<void> _cargarLecciones() async {
+    try {
+      var storage = GetStorage();
+    var token = storage.read('token');
+      final List<dynamic> leccionesData = await LeccionesService.obtenerLecciones(token);
+      setState(() {
+        _leccionesData = leccionesData;
+      });
+    } catch (e) {
+      print('Error al cargar las lecciones: $e');
+    }
+  }
+
+  Future<void> _desbloquearLeccion(int id) async {
+    try {
+      var storage = GetStorage();
+    var token = storage.read('token');
+      await LeccionesService.desbloquearleccion(token, id);
+      await _cargarLecciones();
+    } catch (e) {
+      print('Error al cargar las lecciones: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<dynamic>>(
-       
-      future: LeccionesService.obtenerLecciones(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
-        } else if (snapshot.hasError) {
-          return Center(child: Text('Error: ${snapshot.error}'));
-        } else {
-          final List<dynamic> leccionesData = snapshot.data ?? [];
+    print(_leccionesData);
+    return Scrollbar(
+      controller: _scrollController,
+      child: ListView.builder(
+        controller: _scrollController,
+        itemCount: _leccionesData.length,
+        itemBuilder: (context, index) {
+          final bool desbloqueada = _leccionesData[index]["desbloqueda"] ?? false;
 
-          return Scrollbar(
-     
-           
-            controller: _scrollController,
-            child: ListView.builder(
-              controller: _scrollController,
-              itemCount: leccionesData.length,
-              itemBuilder: (context, index) {
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => LeccionDetalle(
-                          leccionData: leccionesData[index],
-                        ),
-                      ),
-                    );
-                  },
-                  child: Container(
-                    padding: EdgeInsets.all(20),
-                    margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: [
-                        BoxShadow(
-                          offset: const Offset(0, 5),
-                          color:
-                              Color.fromARGB(255, 104, 51, 155).withOpacity(.2),
-                          spreadRadius: 2,
-                          blurRadius: 10,
-                        )
-                      ],
-                    ),
-                    child: Text(
-                      leccionesData[index]['Nombre_de_la_leccion'] ?? '',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
+          return GestureDetector(
+            onTap: () {
+              if (desbloqueada || index == 0) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => LeccionDetalle(
+                      leccionData: _leccionesData[index],
                     ),
                   ),
+                  
                 );
-              },
+                _desbloquearLeccion(_leccionesData[index]["id"]);
+
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text('¡La lección está bloqueada! Debes completar las anteriores.'),
+                ));
+              }
+            },
+            child: Container(
+              padding: EdgeInsets.all(20),
+              margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+              decoration: BoxDecoration(
+                color: desbloqueada ? Colors.white : Colors.grey.withOpacity(0.5),
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: [
+                  BoxShadow(
+                    offset: const Offset(0, 5),
+                    color: Color.fromARGB(255, 104, 51, 155).withOpacity(.2),
+                    spreadRadius: 2,
+                    blurRadius: 10,
+                  )
+                ],
+              ),
+              child: Text(
+                _leccionesData[index]['Nombre_de_la_leccion'] ?? '',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
           );
-        }
-      },
+        },
+      ),
     );
   }
 }
