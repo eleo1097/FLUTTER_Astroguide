@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:html';
 import 'package:astroguide_flutter/models/comment_model.dart';
 import 'package:astroguide_flutter/pages/editar_perfil.dart';
 import 'package:astroguide_flutter/pages/perfil.dart';
@@ -32,8 +31,8 @@ class UserService {
       }
   }
 
-  static Future<void> actualizarUsuario(String token, String url, Map<String, dynamic> userData) async {
-    final Url = "http://10.0.2.2:8000/api/updateUser/{id}";
+  static Future<void> actualizarUsuario(String token, Map<String, dynamic> userData) async {
+    final url = "http://10.0.2.2:8000/api/updateUser";
     var headers = {
       'Content-Type': 'application/json',
       'authorization': 'Bearer $token'

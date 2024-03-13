@@ -1,12 +1,13 @@
+import 'package:astroguide_flutter/pages/menu.dart';
+import 'package:astroguide_flutter/pages/perfil.dart';
 import 'package:flutter/material.dart';
 import 'package:astroguide_flutter/services/user_service.dart';
-import 'package:get_storage/get_storage.dart'; 
+import 'package:get_storage/get_storage.dart';
 
 class EditarPerfil extends StatefulWidget {
   @override
   _EditarPerfilState createState() => _EditarPerfilState();
 }
-
 
 class _EditarPerfilState extends State<EditarPerfil> {
   late TextEditingController _nameController;
@@ -26,12 +27,19 @@ class _EditarPerfilState extends State<EditarPerfil> {
 
     obtenerDatosActuales();
   }
-  void _actualizarUsuario() {
-    UserService.actualizarUsuario(
-      _nombreActual,
-      _usernameActual,
-      _emailActual as Map<String, dynamic>,
-    );
+
+  void _actualizarUsuario() async {
+    var storage = GetStorage();
+    var token = storage.read('token');
+    await UserService.actualizarUsuario(token, {
+      "name": _nameController.text.trim(),
+      "username": _usernameController.text.trim(),
+      "email": _emailController.text.trim(),
+    });
+    Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => menu()),
+            );
   }
 
   Future<void> obtenerDatosActuales() async {
@@ -43,14 +51,12 @@ class _EditarPerfilState extends State<EditarPerfil> {
       _nombreActual = userData.name;
       _usernameActual = userData.username;
       _emailActual = userData.email;
-      
+
       _nameController.text = _nombreActual;
       _usernameController.text = _usernameActual;
       _emailController.text = _emailActual;
     });
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -81,11 +87,12 @@ class _EditarPerfilState extends State<EditarPerfil> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: TextStyle(color: const Color.fromARGB(255, 0, 0, 0))),
+        Text(label,
+            style: TextStyle(color: const Color.fromARGB(255, 0, 0, 0))),
         TextField(
-          controller: controller,          
+          controller: controller,
           style: TextStyle(color: const Color.fromARGB(255, 133, 122, 122)),
-          decoration: InputDecoration(            
+          decoration: InputDecoration(
             border: OutlineInputBorder(),
           ),
         ),
