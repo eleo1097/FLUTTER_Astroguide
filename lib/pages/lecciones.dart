@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:astroguide_flutter/services/lecciones_service.dart';
 import 'package:get_storage/get_storage.dart';
-import 'menu.dart'; // Importa la primera página para la navegación
+// Importa la primera página para la navegación
 
 void main() {
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(

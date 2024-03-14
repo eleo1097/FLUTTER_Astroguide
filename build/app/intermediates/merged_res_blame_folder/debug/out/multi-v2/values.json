@@ -4,7 +4,7 @@
             "outputFile": "com.example.astroguide_flutter.app-mergeDebugResources-9:/values/values.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\SENA\\Desktop\\FLUTTER_Astroguide\\android\\app\\src\\main\\res\\values\\styles.xml",
+                    "source": "C:\\Users\\SENA\\Desktop\\adso\\Astroguide\\FLUTTER_Astroguide\\android\\app\\src\\main\\res\\values\\styles.xml",
                     "from": {
                         "startLines": "3,14",
                         "startColumns": "4,4",

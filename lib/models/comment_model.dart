@@ -104,7 +104,7 @@ class User {
   String? name;
   String? username;
   String? email;
-  dynamic? emailVerifiedAt;
+  dynamic emailVerifiedAt;
   DateTime? createdAt;
   DateTime? updatedAt;
 
