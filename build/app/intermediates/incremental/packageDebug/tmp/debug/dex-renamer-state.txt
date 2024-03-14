@@ -1,4 +1,4 @@
-#Wed Mar 06 17:23:48 COT 2024
-base.0=C\:\\Users\\river\\OneDrive\\Desktop\\FLUTTER\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\classes.dex
+#Thu Mar 14 01:23:52 COT 2024
+base.0=C\:\\FLUTTER_Astroguide\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\classes.dex
 path.0=classes.dex
 renamed.0=classes.dex
