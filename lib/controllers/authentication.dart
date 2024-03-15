@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:astroguide_flutter/constants/constants.dart';
 import 'package:astroguide_flutter/pages/menu.dart';
+import 'package:astroguide_flutter/pages/welcome_page.dart';
 //import 'package:astroguide_flutter/pages/welcome_page.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -14,7 +15,7 @@ class AuthenticationController extends GetxController {
 
     Future<void> logout() async {
     box.remove('token'); 
-    Get.offAll(() => LoginPage());
+    Get.offAll(() => WelcomeScreen());
   }
 
 
