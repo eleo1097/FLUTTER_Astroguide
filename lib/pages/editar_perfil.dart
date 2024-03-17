@@ -108,4 +108,4 @@ class _EditarPerfilState extends State<EditarPerfil> {
     _emailController.dispose();
     super.dispose();
   }
-}
+

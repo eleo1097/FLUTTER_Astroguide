@@ -35,11 +35,9 @@ class QuizService {
       final response = await http.post(Uri.parse(url), body: jsonEncode(data), headers:headers);
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
-        // Si la solicitud fue exitosa, devuelve los datos decodificados
         return data["quiz_terminado_correctamente"];
       }
       else {
-        // Si la solicitud falló, maneja el error
         throw Exception('Error al obtener quizs: ${response.statusCode}');
       }
     } catch (e) {
