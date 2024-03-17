@@ -3,6 +3,10 @@ import 'package:astroguide_flutter/services/user_service.dart';
 import 'package:get_storage/get_storage.dart';
 import 'editar_perfil.dart'; // Importa la pantalla de edición de perfil
 
+import 'package:astroguide_flutter/theme/theme.dart';
+
+
+
 class UserData {
   final String name;
   final String username;
@@ -67,6 +71,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     'Correo electrónico: ${usuario.email}',
                     style: TextStyle(fontSize: 20.0),
                   ),
+
+                  SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => EditarPerfil()),
+                            );
+                          },
+                          child: const Text('Editar Perfil'),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 30.0,
+                      ),
+
                   SizedBox(height: 20.0),
                   ElevatedButton(
                     onPressed: () {
@@ -78,6 +99,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     },
                     child: Text('Editar perfil'),
                   ),
+
                 ],
               ),
             );
